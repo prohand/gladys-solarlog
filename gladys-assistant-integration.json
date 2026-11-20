@@ -1,0 +1,775 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "Solar-Log",
+  "description": {
+    "en": "Follow the production, consumption and surplus of your solar plant with a Solar-Log.",
+    "fr": "Suivez production, consommation et surplus de vos panneaux solaires avec un Solar-Log.",
+    "de": "Verfolge Erzeugung, Verbrauch und Überschuss deiner Solaranlage mit einem Solar-Log.",
+    "es": "Siga la producción, el consumo y el excedente de su instalación solar con un Solar-Log."
+  },
+  "version": "0.0.0",
+  "docker_image": "ghcr.io/prohand/gladys-solarlog:0.0.0",
+  "gladys_version": ">=5.3.0",
+  "cover_image": "https://raw.githubusercontent.com/prohand/gladys-solarlog/main/cover.png",
+  "categories": ["energy"],
+  "keywords": [
+    "solar-log",
+    "solarlog",
+    "photovoltaic",
+    "photovoltaïque",
+    "photovoltaik",
+    "fotovoltaica",
+    "solar panels",
+    "panneaux solaires",
+    "inverter",
+    "onduleur"
+  ],
+  "countries": [
+    "DE",
+    "AT",
+    "CH",
+    "FR",
+    "BE",
+    "NL",
+    "LU",
+    "IT",
+    "ES",
+    "PT",
+    "GB",
+    "IE",
+    "DK",
+    "SE",
+    "NO",
+    "FI",
+    "PL",
+    "CZ",
+    "SK",
+    "GR"
+  ],
+  "transports": ["local"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "Getting started",
+        "fr": "Pour commencer",
+        "de": "Erste Schritte",
+        "es": "Primeros pasos"
+      },
+      "description": {
+        "en": "The integration reads your Solar-Log on your local network, through its open JSON interface. In the Solar-Log web page, open Configuration > System > Access control and turn on \"Open JSON interface\", then enter its address below. No cloud account is needed.",
+        "fr": "L'intégration lit votre Solar-Log sur votre réseau local, via son interface JSON ouverte. Dans la page web du Solar-Log, ouvrez Configuration > Système > Contrôle d'accès et activez « Interface JSON ouverte », puis saisissez son adresse ci-dessous. Aucun compte cloud n'est nécessaire.",
+        "de": "Die Integration liest deinen Solar-Log in deinem lokalen Netzwerk über seine offene JSON-Schnittstelle. Öffne auf der Weboberfläche des Solar-Log Konfiguration > System > Zugangskontrolle, aktiviere „Offene JSON-Schnittstelle“ und gib dann unten seine Adresse ein. Ein Cloud-Konto ist nicht nötig.",
+        "es": "La integración lee su Solar-Log en su red local, a través de su interfaz JSON abierta. En la página web del Solar-Log, abra Configuración > Sistema > Control de acceso y active «Interfaz JSON abierta»; luego introduzca su dirección abajo. No se necesita ninguna cuenta en la nube."
+      },
+      "links": [
+        {
+          "url": "https://github.com/prohand/gladys-solarlog/blob/main/docs/en.md",
+          "label": {
+            "en": "Integration documentation",
+            "fr": "Documentation de l'intégration",
+            "de": "Dokumentation der Integration",
+            "es": "Documentación de la integración"
+          }
+        }
+      ]
+    },
+    {
+      "key": "host",
+      "type": "string",
+      "label": {
+        "en": "Solar-Log address",
+        "fr": "Adresse du Solar-Log",
+        "de": "Adresse des Solar-Log",
+        "es": "Dirección del Solar-Log"
+      },
+      "description": {
+        "en": "IP address or host name of the Solar-Log on your network. Give it a fixed address in your router.",
+        "fr": "Adresse IP ou nom d'hôte du Solar-Log sur votre réseau. Donnez-lui une adresse fixe dans votre box.",
+        "de": "IP-Adresse oder Hostname des Solar-Log in deinem Netzwerk. Gib ihm in deinem Router eine feste Adresse.",
+        "es": "Dirección IP o nombre de host del Solar-Log en su red. Asígnele una dirección fija en su router."
+      },
+      "placeholder": {
+        "en": "e.g. 192.168.1.20",
+        "fr": "ex. 192.168.1.20",
+        "de": "z. B. 192.168.1.20",
+        "es": "p. ej. 192.168.1.20"
+      },
+      "required": true
+    },
+    {
+      "key": "password",
+      "type": "secret",
+      "label": {
+        "en": "User password (optional)",
+        "fr": "Mot de passe utilisateur (optionnel)",
+        "de": "Benutzerpasswort (optional)",
+        "es": "Contraseña de usuario (opcional)"
+      },
+      "description": {
+        "en": "Only if the \"user\" access level of the Solar-Log is protected by a password. It unlocks the per-inverter and battery data.",
+        "fr": "Uniquement si le niveau d'accès « utilisateur » du Solar-Log est protégé par un mot de passe. Il donne accès aux données par onduleur et à la batterie.",
+        "de": "Nur wenn die Zugriffsebene „Benutzer“ des Solar-Log durch ein Passwort geschützt ist. Es schaltet die Daten pro Wechselrichter und der Batterie frei.",
+        "es": "Solo si el nivel de acceso «usuario» del Solar-Log está protegido por contraseña. Da acceso a los datos por inversor y de la batería."
+      },
+      "required": false
+    },
+    {
+      "key": "poll_frequency",
+      "type": "number",
+      "label": {
+        "en": "Refresh interval (s)",
+        "fr": "Intervalle de rafraîchissement (s)",
+        "de": "Aktualisierungsintervall (s)",
+        "es": "Intervalo de actualización (s)"
+      },
+      "description": {
+        "en": "How often the Solar-Log is read, in seconds (30 minimum).",
+        "fr": "Fréquence de lecture du Solar-Log, en secondes (30 minimum).",
+        "de": "Wie oft der Solar-Log gelesen wird, in Sekunden (mindestens 30).",
+        "es": "Frecuencia de lectura del Solar-Log, en segundos (mínimo 30)."
+      },
+      "required": false,
+      "default": 60,
+      "min": 30,
+      "max": 3600
+    },
+    {
+      "key": "production_threshold",
+      "type": "number",
+      "label": {
+        "en": "Production threshold (W)",
+        "fr": "Seuil de production (W)",
+        "de": "Erzeugungsschwelle (W)",
+        "es": "Umbral de producción (W)"
+      },
+      "description": {
+        "en": "Production above which the \"Production started\" trigger fires. \"Production stopped\" fires below half of it.",
+        "fr": "Production au-dessus de laquelle le déclencheur « Production démarrée » se déclenche. « Production arrêtée » se déclenche sous la moitié.",
+        "de": "Erzeugung, ab der der Auslöser „Erzeugung gestartet“ auslöst. „Erzeugung beendet“ löst unterhalb der Hälfte aus.",
+        "es": "Producción a partir de la cual se dispara «Producción iniciada». «Producción detenida» se dispara por debajo de la mitad."
+      },
+      "required": false,
+      "default": 50,
+      "min": 0,
+      "max": 100000
+    },
+    {
+      "key": "surplus_threshold",
+      "type": "number",
+      "label": {
+        "en": "Surplus threshold (W)",
+        "fr": "Seuil de surplus (W)",
+        "de": "Überschussschwelle (W)",
+        "es": "Umbral de excedente (W)"
+      },
+      "description": {
+        "en": "Surplus (production minus consumption) from which the \"Surplus available\" trigger fires. Needs a consumption meter on the Solar-Log.",
+        "fr": "Surplus (production moins consommation) à partir duquel le déclencheur « Surplus disponible » se déclenche. Nécessite un compteur de consommation sur le Solar-Log.",
+        "de": "Überschuss (Erzeugung minus Verbrauch), ab dem der Auslöser „Überschuss verfügbar“ auslöst. Benötigt einen Verbrauchszähler am Solar-Log.",
+        "es": "Excedente (producción menos consumo) a partir del cual se dispara «Excedente disponible». Requiere un contador de consumo en el Solar-Log."
+      },
+      "required": false,
+      "default": 1000,
+      "min": 0,
+      "max": 1000000
+    },
+    {
+      "key": "surplus_hysteresis",
+      "type": "number",
+      "label": {
+        "en": "Surplus margin (W)",
+        "fr": "Marge de surplus (W)",
+        "de": "Überschuss-Spanne (W)",
+        "es": "Margen de excedente (W)"
+      },
+      "description": {
+        "en": "\"Surplus ended\" fires only when the surplus drops this far below the threshold, so a passing cloud does not start and stop your appliances.",
+        "fr": "« Surplus terminé » ne se déclenche que si le surplus descend de cette valeur sous le seuil : un nuage passager ne fait pas démarrer et arrêter vos appareils.",
+        "de": "„Überschuss beendet“ löst erst aus, wenn der Überschuss um diesen Wert unter die Schwelle fällt: Eine vorbeiziehende Wolke schaltet deine Geräte nicht ein und aus.",
+        "es": "«Excedente terminado» solo se dispara cuando el excedente baja esta cantidad por debajo del umbral: una nube pasajera no enciende y apaga sus aparatos."
+      },
+      "required": false,
+      "default": 200,
+      "min": 0,
+      "max": 100000
+    },
+    {
+      "key": "inverters",
+      "type": "boolean",
+      "label": {
+        "en": "One device per inverter",
+        "fr": "Un appareil par onduleur",
+        "de": "Ein Gerät pro Wechselrichter",
+        "es": "Un dispositivo por inversor"
+      },
+      "description": {
+        "en": "Also create a device with the live power of each inverter connected to the Solar-Log.",
+        "fr": "Crée aussi un appareil avec la puissance instantanée de chaque onduleur relié au Solar-Log.",
+        "de": "Erstellt zusätzlich ein Gerät mit der aktuellen Leistung jedes am Solar-Log angeschlossenen Wechselrichters.",
+        "es": "Crea también un dispositivo con la potencia instantánea de cada inversor conectado al Solar-Log."
+      },
+      "required": false,
+      "default": true
+    }
+  ],
+  "actions": [
+    {
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
+      "timeout_seconds": 30
+    },
+    {
+      "key": "rediscover",
+      "label": {
+        "en": "Search for inverters again",
+        "fr": "Rechercher à nouveau les onduleurs",
+        "de": "Wechselrichter erneut suchen",
+        "es": "Buscar de nuevo los inversores"
+      },
+      "timeout_seconds": 60
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "production_started",
+      "label": {
+        "en": "Solar production started",
+        "fr": "Production solaire démarrée",
+        "de": "Solarerzeugung gestartet",
+        "es": "Producción solar iniciada"
+      },
+      "description": {
+        "en": "The production went above the production threshold (morning).",
+        "fr": "La production a dépassé le seuil de production (le matin).",
+        "de": "Die Erzeugung hat die Erzeugungsschwelle überschritten (morgens).",
+        "es": "La producción superó el umbral de producción (por la mañana)."
+      },
+      "variables": [
+        {
+          "key": "production_w",
+          "type": "number",
+          "label": {
+            "en": "Production (W)",
+            "fr": "Production (W)",
+            "de": "Erzeugung (W)",
+            "es": "Producción (W)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "production_stopped",
+      "label": {
+        "en": "Solar production stopped",
+        "fr": "Production solaire arrêtée",
+        "de": "Solarerzeugung beendet",
+        "es": "Producción solar detenida"
+      },
+      "description": {
+        "en": "The production fell below half of the production threshold (evening).",
+        "fr": "La production est passée sous la moitié du seuil de production (le soir).",
+        "de": "Die Erzeugung ist unter die Hälfte der Erzeugungsschwelle gefallen (abends).",
+        "es": "La producción bajó de la mitad del umbral de producción (por la tarde)."
+      },
+      "variables": [
+        {
+          "key": "yield_today_kwh",
+          "type": "number",
+          "label": {
+            "en": "Production today (kWh)",
+            "fr": "Production du jour (kWh)",
+            "de": "Erzeugung heute (kWh)",
+            "es": "Producción de hoy (kWh)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "surplus_started",
+      "label": {
+        "en": "Solar surplus available",
+        "fr": "Surplus solaire disponible",
+        "de": "Solarüberschuss verfügbar",
+        "es": "Excedente solar disponible"
+      },
+      "description": {
+        "en": "Production minus consumption reached the surplus threshold: time to start an appliance.",
+        "fr": "Production moins consommation a atteint le seuil de surplus : c'est le moment de lancer un appareil.",
+        "de": "Erzeugung minus Verbrauch hat die Überschussschwelle erreicht: Zeit, ein Gerät zu starten.",
+        "es": "Producción menos consumo alcanzó el umbral de excedente: es momento de encender un aparato."
+      },
+      "variables": [
+        {
+          "key": "surplus_w",
+          "type": "number",
+          "label": {
+            "en": "Surplus (W)",
+            "fr": "Surplus (W)",
+            "de": "Überschuss (W)",
+            "es": "Excedente (W)"
+          }
+        },
+        {
+          "key": "production_w",
+          "type": "number",
+          "label": {
+            "en": "Production (W)",
+            "fr": "Production (W)",
+            "de": "Erzeugung (W)",
+            "es": "Producción (W)"
+          }
+        },
+        {
+          "key": "consumption_w",
+          "type": "number",
+          "label": {
+            "en": "Consumption (W)",
+            "fr": "Consommation (W)",
+            "de": "Verbrauch (W)",
+            "es": "Consumo (W)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "surplus_ended",
+      "label": {
+        "en": "Solar surplus ended",
+        "fr": "Surplus solaire terminé",
+        "de": "Solarüberschuss beendet",
+        "es": "Excedente solar terminado"
+      },
+      "description": {
+        "en": "The surplus dropped below the threshold minus the margin.",
+        "fr": "Le surplus est passé sous le seuil moins la marge.",
+        "de": "Der Überschuss ist unter die Schwelle minus Spanne gefallen.",
+        "es": "El excedente bajó del umbral menos el margen."
+      },
+      "variables": [
+        {
+          "key": "surplus_w",
+          "type": "number",
+          "label": {
+            "en": "Surplus (W)",
+            "fr": "Surplus (W)",
+            "de": "Überschuss (W)",
+            "es": "Excedente (W)"
+          }
+        },
+        {
+          "key": "production_w",
+          "type": "number",
+          "label": {
+            "en": "Production (W)",
+            "fr": "Production (W)",
+            "de": "Erzeugung (W)",
+            "es": "Producción (W)"
+          }
+        },
+        {
+          "key": "consumption_w",
+          "type": "number",
+          "label": {
+            "en": "Consumption (W)",
+            "fr": "Consommation (W)",
+            "de": "Verbrauch (W)",
+            "es": "Consumo (W)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "connection_lost",
+      "label": {
+        "en": "Solar-Log unreachable",
+        "fr": "Solar-Log injoignable",
+        "de": "Solar-Log nicht erreichbar",
+        "es": "Solar-Log inaccesible"
+      },
+      "description": {
+        "en": "The Solar-Log did not answer three reads in a row.",
+        "fr": "Le Solar-Log n'a pas répondu à trois lectures de suite.",
+        "de": "Der Solar-Log hat dreimal hintereinander nicht geantwortet.",
+        "es": "El Solar-Log no respondió a tres lecturas seguidas."
+      },
+      "fields": [
+        {
+          "key": "reason",
+          "type": "select",
+          "label": {
+            "en": "Reason",
+            "fr": "Raison",
+            "de": "Grund",
+            "es": "Motivo"
+          },
+          "options": [
+            {
+              "value": "unreachable",
+              "label": {
+                "en": "No answer",
+                "fr": "Pas de réponse",
+                "de": "Keine Antwort",
+                "es": "Sin respuesta"
+              }
+            },
+            {
+              "value": "auth",
+              "label": {
+                "en": "Password refused",
+                "fr": "Mot de passe refusé",
+                "de": "Passwort abgelehnt",
+                "es": "Contraseña rechazada"
+              }
+            },
+            {
+              "value": "json_disabled",
+              "label": {
+                "en": "JSON interface disabled",
+                "fr": "Interface JSON désactivée",
+                "de": "JSON-Schnittstelle deaktiviert",
+                "es": "Interfaz JSON desactivada"
+              }
+            },
+            {
+              "value": "invalid_data",
+              "label": {
+                "en": "Unusable data",
+                "fr": "Données inutilisables",
+                "de": "Unbrauchbare Daten",
+                "es": "Datos inutilizables"
+              }
+            },
+            {
+              "value": "not_configured",
+              "label": {
+                "en": "Address missing",
+                "fr": "Adresse manquante",
+                "de": "Adresse fehlt",
+                "es": "Falta la dirección"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "reason",
+          "type": "string",
+          "label": {
+            "en": "Reason",
+            "fr": "Raison",
+            "de": "Grund",
+            "es": "Motivo"
+          }
+        }
+      ]
+    },
+    {
+      "key": "connection_restored",
+      "label": {
+        "en": "Solar-Log reachable again",
+        "fr": "Solar-Log de nouveau joignable",
+        "de": "Solar-Log wieder erreichbar",
+        "es": "Solar-Log accesible de nuevo"
+      },
+      "description": {
+        "en": "The Solar-Log answers again after being unreachable.",
+        "fr": "Le Solar-Log répond de nouveau après avoir été injoignable.",
+        "de": "Der Solar-Log antwortet wieder, nachdem er nicht erreichbar war.",
+        "es": "El Solar-Log responde de nuevo tras estar inaccesible."
+      }
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "read_values",
+      "label": {
+        "en": "Read the solar values",
+        "fr": "Lire les valeurs solaires",
+        "de": "Solarwerte lesen",
+        "es": "Leer los valores solares"
+      },
+      "description": {
+        "en": "Reads the Solar-Log now and gives its values to the next actions.",
+        "fr": "Lit le Solar-Log maintenant et transmet ses valeurs aux actions suivantes.",
+        "de": "Liest den Solar-Log jetzt und gibt seine Werte an die nächsten Aktionen weiter.",
+        "es": "Lee el Solar-Log ahora y pasa sus valores a las acciones siguientes."
+      },
+      "timeout_seconds": 30,
+      "outputs": [
+        {
+          "key": "reachable",
+          "type": "boolean",
+          "label": {
+            "en": "Solar-Log reachable",
+            "fr": "Solar-Log joignable",
+            "de": "Solar-Log erreichbar",
+            "es": "Solar-Log accesible"
+          }
+        },
+        {
+          "key": "production_w",
+          "type": "number",
+          "label": {
+            "en": "Production (W)",
+            "fr": "Production (W)",
+            "de": "Erzeugung (W)",
+            "es": "Producción (W)"
+          }
+        },
+        {
+          "key": "consumption_w",
+          "type": "number",
+          "label": {
+            "en": "Consumption (W)",
+            "fr": "Consommation (W)",
+            "de": "Verbrauch (W)",
+            "es": "Consumo (W)"
+          }
+        },
+        {
+          "key": "surplus_w",
+          "type": "number",
+          "label": {
+            "en": "Surplus (W)",
+            "fr": "Surplus (W)",
+            "de": "Überschuss (W)",
+            "es": "Excedente (W)"
+          }
+        },
+        {
+          "key": "yield_today_kwh",
+          "type": "number",
+          "label": {
+            "en": "Production today (kWh)",
+            "fr": "Production du jour (kWh)",
+            "de": "Erzeugung heute (kWh)",
+            "es": "Producción de hoy (kWh)"
+          }
+        },
+        {
+          "key": "self_consumption_percent",
+          "type": "number",
+          "label": {
+            "en": "Self-consumption (%)",
+            "fr": "Autoconsommation (%)",
+            "de": "Eigenverbrauch (%)",
+            "es": "Autoconsumo (%)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "check_surplus",
+      "label": {
+        "en": "Check the solar surplus",
+        "fr": "Vérifier le surplus solaire",
+        "de": "Solarüberschuss prüfen",
+        "es": "Comprobar el excedente solar"
+      },
+      "description": {
+        "en": "Tells whether the current surplus reaches a minimum, to start an appliance only on solar power.",
+        "fr": "Indique si le surplus actuel atteint un minimum, pour ne lancer un appareil qu'à l'énergie solaire.",
+        "de": "Sagt, ob der aktuelle Überschuss ein Minimum erreicht, um ein Gerät nur mit Solarstrom zu starten.",
+        "es": "Indica si el excedente actual alcanza un mínimo, para encender un aparato solo con energía solar."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "min_surplus",
+          "type": "number",
+          "label": {
+            "en": "Minimum surplus (W)",
+            "fr": "Surplus minimum (W)",
+            "de": "Mindestüberschuss (W)",
+            "es": "Excedente mínimo (W)"
+          },
+          "placeholder": {
+            "en": "e.g. 1500",
+            "fr": "ex. 1500",
+            "de": "z. B. 1500",
+            "es": "p. ej. 1500"
+          },
+          "required": true,
+          "default": 1000,
+          "min": 0,
+          "max": 1000000
+        }
+      ],
+      "outputs": [
+        {
+          "key": "available",
+          "type": "boolean",
+          "label": {
+            "en": "Surplus available",
+            "fr": "Surplus disponible",
+            "de": "Überschuss verfügbar",
+            "es": "Excedente disponible"
+          }
+        },
+        {
+          "key": "surplus_w",
+          "type": "number",
+          "label": {
+            "en": "Surplus (W)",
+            "fr": "Surplus (W)",
+            "de": "Überschuss (W)",
+            "es": "Excedente (W)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "get_yield",
+      "label": {
+        "en": "Get the solar yield",
+        "fr": "Obtenir la production solaire",
+        "de": "Solarertrag abrufen",
+        "es": "Obtener la producción solar"
+      },
+      "description": {
+        "en": "Production and consumption of a period, in kWh.",
+        "fr": "Production et consommation d'une période, en kWh.",
+        "de": "Erzeugung und Verbrauch eines Zeitraums, in kWh.",
+        "es": "Producción y consumo de un periodo, en kWh."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "period",
+          "type": "select",
+          "label": {
+            "en": "Period",
+            "fr": "Période",
+            "de": "Zeitraum",
+            "es": "Periodo"
+          },
+          "required": true,
+          "default": "today",
+          "options": [
+            {
+              "value": "today",
+              "label": {
+                "en": "Today",
+                "fr": "Aujourd'hui",
+                "de": "Heute",
+                "es": "Hoy"
+              }
+            },
+            {
+              "value": "yesterday",
+              "label": {
+                "en": "Yesterday",
+                "fr": "Hier",
+                "de": "Gestern",
+                "es": "Ayer"
+              }
+            },
+            {
+              "value": "month",
+              "label": {
+                "en": "This month",
+                "fr": "Ce mois-ci",
+                "de": "Diesen Monat",
+                "es": "Este mes"
+              }
+            },
+            {
+              "value": "year",
+              "label": {
+                "en": "This year",
+                "fr": "Cette année",
+                "de": "Dieses Jahr",
+                "es": "Este año"
+              }
+            },
+            {
+              "value": "total",
+              "label": {
+                "en": "Since installation",
+                "fr": "Depuis l'installation",
+                "de": "Seit Installation",
+                "es": "Desde la instalación"
+              }
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "key": "reachable",
+          "type": "boolean",
+          "label": {
+            "en": "Solar-Log reachable",
+            "fr": "Solar-Log joignable",
+            "de": "Solar-Log erreichbar",
+            "es": "Solar-Log accesible"
+          }
+        },
+        {
+          "key": "production_kwh",
+          "type": "number",
+          "label": {
+            "en": "Production (kWh)",
+            "fr": "Production (kWh)",
+            "de": "Erzeugung (kWh)",
+            "es": "Producción (kWh)"
+          }
+        },
+        {
+          "key": "consumption_kwh",
+          "type": "number",
+          "label": {
+            "en": "Consumption (kWh)",
+            "fr": "Consommation (kWh)",
+            "de": "Verbrauch (kWh)",
+            "es": "Consumo (kWh)"
+          }
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "key": "solar_overview",
+      "label": {
+        "en": "Solar production",
+        "fr": "Production solaire",
+        "de": "Solarerzeugung",
+        "es": "Producción solar"
+      },
+      "description": {
+        "en": "Live production, consumption and surplus, 24 h chart and link state.",
+        "fr": "Production, consommation et surplus en direct, courbe 24 h et état du lien.",
+        "de": "Erzeugung, Verbrauch und Überschuss live, 24-h-Kurve und Verbindungsstatus.",
+        "es": "Producción, consumo y excedente en directo, gráfico de 24 h y estado del enlace."
+      },
+      "icon": "sun",
+      "action_timeout_seconds": 30
+    },
+    {
+      "key": "solar_yields",
+      "label": {
+        "en": "Solar yields",
+        "fr": "Bilan solaire",
+        "de": "Solarerträge",
+        "es": "Balance solar"
+      },
+      "description": {
+        "en": "Production and consumption today, yesterday, this month, this year and in total.",
+        "fr": "Production et consommation du jour, d'hier, du mois, de l'année et au total.",
+        "de": "Erzeugung und Verbrauch heute, gestern, diesen Monat, dieses Jahr und gesamt.",
+        "es": "Producción y consumo de hoy, ayer, este mes, este año y en total."
+      },
+      "icon": "bar-chart-2"
+    }
+  ]
+}

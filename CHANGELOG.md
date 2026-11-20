@@ -6,6 +6,8 @@ All notable changes to this integration are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.0.1] - 2026-11-20
+
 ### Added
 
 - First version of the Solar-Log integration, read on the local network through the open JSON
@@ -20,4 +22,5 @@ All notable changes to this integration are documented here. The format follows
 - Dashboard widgets "Solar production" and "Solar yields".
 - English, French, German and Spanish texts and documentation.
 
-[Unreleased]: https://github.com/prohand/gladys-solarlog/commits/main
+[Unreleased]: https://github.com/prohand/gladys-solarlog/compare/v0.0.1...HEAD
+[0.0.1]: https://github.com/prohand/gladys-solarlog/releases/tag/v0.0.1
